@@ -83,10 +83,10 @@ class MainActivity : AppCompatActivity(), HorizontalScroll.ScrollViewListener, V
     private fun initRelativeLayouts() {
         // fixed
         fixedRelativeLayout = RelativeLayout(applicationContext)
+        fixedRelativeLayout!!.id = R.id.fixed_relative_layout
         mainRelativeLayout?.let {
-            initLayout(
+            initRelativeLayout(
                 fixedRelativeLayout!!,
-                R.id.fixed_relative_layout,
                 RelativeLayout.LayoutParams(
                     SCREEN_WIDTH / 5,
                     SCREEN_HEIGHT / 20
@@ -98,10 +98,10 @@ class MainActivity : AppCompatActivity(), HorizontalScroll.ScrollViewListener, V
 
         // header
         headerRelativeLayout = RelativeLayout(applicationContext)
+        headerRelativeLayout!!.id = R.id.header_relative_layout
         mainRelativeLayout?.let {
-            initLayout(
+            initRelativeLayout(
                 headerRelativeLayout!!,
-                R.id.header_relative_layout,
                 RelativeLayout.LayoutParams(
                     SCREEN_WIDTH - (SCREEN_WIDTH/5),
                     SCREEN_HEIGHT/20
@@ -113,10 +113,10 @@ class MainActivity : AppCompatActivity(), HorizontalScroll.ScrollViewListener, V
 
         // column
         columnRelativeLayout = RelativeLayout(applicationContext)
+        columnRelativeLayout!!.id = R.id.column_relative_layout
         mainRelativeLayout?.let {
-            initLayout(
+            initRelativeLayout(
                 columnRelativeLayout!!,
-                R.id.column_relative_layout,
                 RelativeLayout.LayoutParams(
                     SCREEN_WIDTH/5,
                     SCREEN_HEIGHT - (SCREEN_HEIGHT/20)
@@ -128,10 +128,10 @@ class MainActivity : AppCompatActivity(), HorizontalScroll.ScrollViewListener, V
 
         // content
         contentRelativeLayout = RelativeLayout(applicationContext)
+        contentRelativeLayout!!.id = R.id.content_relative_layout
         mainRelativeLayout?.let {
-            initLayout(
+            initRelativeLayout(
                 contentRelativeLayout!!,
-                R.id.content_relative_layout,
                 RelativeLayout.LayoutParams(
                     SCREEN_WIDTH - (SCREEN_WIDTH/5),
                     SCREEN_HEIGHT - (SCREEN_HEIGHT/20)
@@ -142,15 +142,13 @@ class MainActivity : AppCompatActivity(), HorizontalScroll.ScrollViewListener, V
         }
     }
 
-    private fun initLayout(
+    private fun initRelativeLayout(
         layout: RelativeLayout,
-        assignedId: Int,
         layoutParams: RelativeLayout.LayoutParams,
         layoutRules: Map<Int, Int>,
         parentView: ViewGroup
     ) {
         layout.apply {
-            id = assignedId
             setPadding(0, 0, 0, 0)
         }
         for (rule in layoutRules) {
@@ -159,43 +157,66 @@ class MainActivity : AppCompatActivity(), HorizontalScroll.ScrollViewListener, V
         parentView!!.addView(layout, layoutParams)
     }
 
+    private fun initGeneralLayout(
+        layout: ViewGroup,
+        layoutParams: ViewGroup.LayoutParams,
+        parentView: ViewGroup
+    ) {
+        layout.apply {
+            setPadding(0, 0, 0, 0)
+        }
+        parentView!!.addView(layout, layoutParams)
+    }
+
     private fun initScrollers() {
         headerHorizontalScrollView = HorizontalScroll(applicationContext)
-        headerHorizontalScrollView!!.setPadding(0,0,0,0)
+        headerRelativeLayout?.let {
+            initGeneralLayout(
+                headerHorizontalScrollView!!,
+                ViewGroup.LayoutParams(
+                    SCREEN_WIDTH - (SCREEN_WIDTH/5),
+                    SCREEN_HEIGHT/20
+                ),
+                it
+            )
+        }
 
         columnVerticalScrollView = VerticalScroll(applicationContext)
-        columnVerticalScrollView!!.setPadding(0,0,0,0)
-
-        contentHorizontalScrollView = HorizontalScroll(applicationContext)
-        contentHorizontalScrollView!!.setPadding(0,0,0,0)
+        columnRelativeLayout?.let {
+            initGeneralLayout(
+                columnVerticalScrollView!!,
+                ViewGroup.LayoutParams(
+                    SCREEN_WIDTH/5,
+                    SCREEN_HEIGHT - (SCREEN_HEIGHT/20)
+                ),
+                it
+            )
+        }
 
         contentVerticalScrollView = VerticalScroll(applicationContext)
-        contentVerticalScrollView!!.setPadding(0,0,0,0)
+        contentRelativeLayout?.let {
+            initGeneralLayout(
+                contentVerticalScrollView!!,
+                ViewGroup.LayoutParams(
+                    SCREEN_WIDTH - (SCREEN_WIDTH/5),
+                    SCREEN_HEIGHT - (SCREEN_HEIGHT/20)
+                ),
+                it
+            )
+        }
 
-        headerHorizontalScrollView!!.layoutParams = ViewGroup.LayoutParams(
-            SCREEN_WIDTH - (SCREEN_WIDTH/5),
-            SCREEN_HEIGHT/20
-        )
+        contentHorizontalScrollView = HorizontalScroll(applicationContext)
+        contentVerticalScrollView?.let {
+            initGeneralLayout(
+                contentHorizontalScrollView!!,
+                ViewGroup.LayoutParams(
+                    SCREEN_WIDTH - (SCREEN_WIDTH/5),
+                    SCREEN_HEIGHT - (SCREEN_HEIGHT/20)
+                ),
+                it
+            )
+        }
 
-        columnVerticalScrollView!!.layoutParams = ViewGroup.LayoutParams(
-            SCREEN_WIDTH/5,
-            SCREEN_HEIGHT - (SCREEN_HEIGHT/20)
-        )
-
-        contentVerticalScrollView!!.layoutParams = ViewGroup.LayoutParams(
-            SCREEN_WIDTH - (SCREEN_WIDTH/5),
-            SCREEN_HEIGHT - (SCREEN_HEIGHT/20)
-        )
-
-        contentHorizontalScrollView!!.layoutParams = ViewGroup.LayoutParams(
-            SCREEN_WIDTH - (SCREEN_WIDTH/5),
-            SCREEN_HEIGHT - (SCREEN_HEIGHT/20)
-        )
-
-        headerRelativeLayout?.addView(headerHorizontalScrollView)
-        columnRelativeLayout?.addView(columnVerticalScrollView)
-        contentVerticalScrollView!!.addView(contentHorizontalScrollView)
-        contentRelativeLayout?.addView(contentVerticalScrollView)
     }
 
     private fun initScroller() {
@@ -204,7 +225,15 @@ class MainActivity : AppCompatActivity(), HorizontalScroll.ScrollViewListener, V
 
     private fun initTableLayouts() {
         fixedTableLayout = TableLayout(applicationContext)
-        fixedTableLayout!!.setPadding(0,0,0,0)
+        fixedTableLayout!!.setBackgroundColor(resources.getColor(R.color.teal_200))
+        fixedRelativeLayout?.let {
+            initGeneralLayout(
+                fixedTableLayout!!,
+                TableLayout.LayoutParams(SCREEN_WIDTH / 5, SCREEN_HEIGHT / 20),
+                it
+            )
+        }
+
         headerTableLayout = TableLayout(applicationContext)
         headerTableLayout!!.setPadding(0,0,0,0)
         columnTableLayout = TableLayout(applicationContext)
@@ -212,11 +241,8 @@ class MainActivity : AppCompatActivity(), HorizontalScroll.ScrollViewListener, V
         contentTableLayout = TableLayout(applicationContext)
         contentTableLayout!!.setPadding(0,0,0,0)
 
-        val fixedLayoutParams =
-            TableLayout.LayoutParams(SCREEN_WIDTH / 5, SCREEN_HEIGHT / 20)
-        fixedTableLayout!!.layoutParams = fixedLayoutParams
-        fixedTableLayout!!.setBackgroundColor(resources.getColor(R.color.teal_200))
-        fixedRelativeLayout!!.addView(fixedTableLayout)
+
+
 
         val headerLayoutParams =
             TableLayout.LayoutParams(SCREEN_WIDTH - (SCREEN_WIDTH / 5), SCREEN_HEIGHT / 20)

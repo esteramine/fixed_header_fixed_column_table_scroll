@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="VcsDirectoryMappings">
+    <mapping directory="$PROJECT_DIR$/DynamicTableLayout" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/GameChangerMobile" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/INCacheServer" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Snackable_Final" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/USTinder" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/edl_monopoly" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/event_registration_site" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/final_year_project" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/fyp_server" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/inwallet-expo" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/spotify_clone" vcs="Git" />
+  </component>
+</project>

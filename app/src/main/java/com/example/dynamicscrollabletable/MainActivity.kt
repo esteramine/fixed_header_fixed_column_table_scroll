@@ -52,16 +52,16 @@ class MainActivity : AppCompatActivity(), HorizontalScroll.ScrollViewListener, V
         initScrollViewListeners()
 
         addRowToFixedSection();
-        initializeRowForTableB();
+        initRowForHeaderTable();
 
-        for (i in 0..8) {
-            addColumnsToHeader("Head$i", i)
+        for (i in 0..9) {
+            addColumnsToHeader("Head $i", i)
         }
         for (i in 0..19) {
-            initializeContentTableRow(i)
-            addRowToColumn("Row$i")
+            addRowToColumn("Row $i")
+            initContentTableRow(i)
             for (j in 0 until headerTableColumnCount) {
-                addColumnToContent(i, "D $i $j")
+                addColumnToContent(i, "($i, $j)")
             }
         }
 
@@ -281,69 +281,68 @@ class MainActivity : AppCompatActivity(), HorizontalScroll.ScrollViewListener, V
         }
     }
 
-    private fun initializeRowForTableB() {
+    private fun initRowForHeaderTable() {
         headerTableRow = TableRow(applicationContext)
         headerTableLayout?.addView(headerTableRow)
     }
 
+    private fun addCell(textContent: String, tableRowLayoutParams: ViewGroup.LayoutParams, parentView: ViewGroup, ) {
+        tableRow = TableRow(applicationContext)
+        val cellTextView = TextView(applicationContext)
+        cellTextView.apply {
+            text = textContent
+            textSize = resources.getDimension(R.dimen.cell_text_size)
+        }
+        tableRow?.apply {
+            layoutParams = tableRowLayoutParams
+            addView(cellTextView)
+        }
+        parentView.addView(tableRow)
+    }
+
     @Synchronized
     private fun addColumnsToHeader(text: String, id: Int) {
-        tableRow = TableRow(applicationContext)
-        val layoutParamsTableRow = TableRow.LayoutParams(SCREEN_WIDTH / 5, SCREEN_HEIGHT / 20)
-        tableRow!!.setPadding(3, 3, 3, 4)
-        tableRow!!.layoutParams = layoutParamsTableRow
-        val label_date = TextView(applicationContext)
-        label_date.text = text
-        label_date.textSize = resources.getDimension(R.dimen.cell_text_size)
-        tableRow!!.addView(label_date)
-        tableRow!!.tag = id
-        headerTableRow?.addView(tableRow)
+        headerTableRow?.let {
+            addCell(text, TableRow.LayoutParams(SCREEN_WIDTH / 5, SCREEN_HEIGHT / 20),
+                it
+            )
+        }
         headerTableColumnCount++
     }
 
     @Synchronized
-    private fun initializeContentTableRow(pos: Int) {
-        val tableRowB = TableRow(applicationContext)
-        val layoutParamsTableRow =
-            TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, SCREEN_HEIGHT / 20)
-        tableRowB.setPadding(0, 0, 0, 0)
-        tableRowB.layoutParams = layoutParamsTableRow
-        contentTableLayout?.addView(tableRowB, pos)
+    private fun initContentTableRow(pos: Int) {
+        tableRow = TableRow(applicationContext)
+        tableRow!!.layoutParams = TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, SCREEN_HEIGHT / 20)
+        contentTableLayout?.addView(tableRow, pos)
     }
 
     @Synchronized
     private fun addRowToColumn(text: String) {
-        val tableRow1 = TableRow(applicationContext)
-        val layoutParamsTableRow1 = TableRow.LayoutParams(SCREEN_WIDTH / 5, SCREEN_HEIGHT / 20)
-        tableRow1.setPadding(3, 3, 3, 4)
-        tableRow1.layoutParams = layoutParamsTableRow1
-        val label_date = TextView(applicationContext)
-        label_date.text = text
-        label_date.textSize = resources.getDimension(R.dimen.cell_text_size)
-        tableRow1.addView(label_date)
-        val tableRow = TableRow(applicationContext)
-        val layoutParamsTableRow = TableRow.LayoutParams(SCREEN_WIDTH / 5, SCREEN_HEIGHT / 20)
-        tableRow.setPadding(0, 0, 0, 0)
-        tableRow.layoutParams = layoutParamsTableRow
-        tableRow.addView(tableRow1)
-        columnTableLayout?.addView(tableRow, columnTableRowCount)
+        val columnTableRow = TableRow(applicationContext)
+        addCell(
+            text,
+            TableRow.LayoutParams(SCREEN_WIDTH / 5, SCREEN_HEIGHT / 20),
+            columnTableRow
+        )
+        columnTableLayout?.let {
+            initGeneralLayout(
+                columnTableRow,
+                TableRow.LayoutParams(SCREEN_WIDTH / 5, SCREEN_HEIGHT / 20),
+                it
+            )
+        }
         columnTableRowCount++
     }
 
     @Synchronized
     private fun addColumnToContent(rowPos: Int, text: String) {
         val tableRowAdd = contentTableLayout?.getChildAt(rowPos) as TableRow
-        tableRow = TableRow(applicationContext)
-        val layoutParamsTableRow = TableRow.LayoutParams(SCREEN_WIDTH / 5, SCREEN_HEIGHT / 20)
-        tableRow!!.setPadding(3, 3, 3, 4)
-        //tableRow!!.background = resources.getDrawable(R.drawable.cell_bacground)
-        tableRow!!.layoutParams = layoutParamsTableRow
-        val label_date = TextView(applicationContext)
-        label_date.text = text
-        label_date.textSize = resources.getDimension(R.dimen.cell_text_size)
-        tableRow!!.tag = label_date
-        tableRow!!.addView(label_date)
-        tableRowAdd.addView(tableRow)
+        addCell(
+            text,
+            TableRow.LayoutParams(SCREEN_WIDTH / 5, SCREEN_HEIGHT / 20),
+            tableRowAdd
+        )
     }
 
     override fun onScrollChanged(

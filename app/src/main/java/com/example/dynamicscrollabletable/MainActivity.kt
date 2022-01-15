@@ -117,7 +117,7 @@ class MainActivity : AppCompatActivity(), HorizontalScroll.ScrollViewListener, V
         }
 
         fixedTableLayout = TableLayout(applicationContext)
-        fixedTableLayout!!.setBackgroundColor(resources.getColor(R.color.teal_200))
+        fixedTableLayout!!.setBackgroundColor(resources.getColor(R.color.fixed))
         fixedRelativeLayout?.let {
             initGeneralLayout(
                 fixedTableLayout!!,
@@ -155,7 +155,7 @@ class MainActivity : AppCompatActivity(), HorizontalScroll.ScrollViewListener, V
         }
 
         headerTableLayout = TableLayout(applicationContext)
-        headerTableLayout!!.setBackgroundColor(resources.getColor(R.color.purple_200))
+        headerTableLayout!!.setBackgroundColor(resources.getColor(R.color.header))
         headerHorizontalScrollView?.let {
             initGeneralLayout(
                 headerTableLayout!!,
@@ -193,7 +193,7 @@ class MainActivity : AppCompatActivity(), HorizontalScroll.ScrollViewListener, V
         }
 
         columnTableLayout = TableLayout(applicationContext)
-        columnTableLayout!!.setBackgroundColor(resources.getColor(R.color.purple_500))
+        columnTableLayout!!.setBackgroundColor(resources.getColor(R.color.column))
         columnVerticalScrollView?.let {
             initGeneralLayout(
                 columnTableLayout!!,
@@ -242,7 +242,7 @@ class MainActivity : AppCompatActivity(), HorizontalScroll.ScrollViewListener, V
         }
 
         contentTableLayout = TableLayout(applicationContext)
-        contentTableLayout!!.setBackgroundColor(resources.getColor(R.color.purple_700))
+        contentTableLayout!!.setBackgroundColor(resources.getColor(R.color.content))
         contentHorizontalScrollView?.let {
             initGeneralLayout(
                 contentTableLayout!!,

@@ -83,58 +83,71 @@ class MainActivity : AppCompatActivity(), HorizontalScroll.ScrollViewListener, V
     private fun initRelativeLayouts() {
         // fixed
         fixedRelativeLayout = RelativeLayout(applicationContext)
-        initRelativeLayout(
-            fixedRelativeLayout!!,
-            R.id.fixed_relative_layout,
-            RelativeLayout.LayoutParams(
-                SCREEN_WIDTH / 5,
-                SCREEN_HEIGHT / 20
-            ),
-            emptyMap()
-        )
+        mainRelativeLayout?.let {
+            initLayout(
+                fixedRelativeLayout!!,
+                R.id.fixed_relative_layout,
+                RelativeLayout.LayoutParams(
+                    SCREEN_WIDTH / 5,
+                    SCREEN_HEIGHT / 20
+                ),
+                emptyMap(),
+                it
+            )
+        }
 
         // header
         headerRelativeLayout = RelativeLayout(applicationContext)
-        initRelativeLayout(
-            headerRelativeLayout!!,
-            R.id.header_relative_layout,
-            RelativeLayout.LayoutParams(
-                SCREEN_WIDTH - (SCREEN_WIDTH/5),
-                SCREEN_HEIGHT/20
-            ),
-            mapOf(RelativeLayout.RIGHT_OF to R.id.fixed_relative_layout)
-        )
+        mainRelativeLayout?.let {
+            initLayout(
+                headerRelativeLayout!!,
+                R.id.header_relative_layout,
+                RelativeLayout.LayoutParams(
+                    SCREEN_WIDTH - (SCREEN_WIDTH/5),
+                    SCREEN_HEIGHT/20
+                ),
+                mapOf(RelativeLayout.RIGHT_OF to R.id.fixed_relative_layout),
+                it
+            )
+        }
 
         // column
         columnRelativeLayout = RelativeLayout(applicationContext)
-        initRelativeLayout(
-            columnRelativeLayout!!,
-            R.id.column_relative_layout,
-            RelativeLayout.LayoutParams(
-                SCREEN_WIDTH/5,
-                SCREEN_HEIGHT - (SCREEN_HEIGHT/20)
-            ),
-            mapOf(RelativeLayout.BELOW to R.id.fixed_relative_layout)
-        )
+        mainRelativeLayout?.let {
+            initLayout(
+                columnRelativeLayout!!,
+                R.id.column_relative_layout,
+                RelativeLayout.LayoutParams(
+                    SCREEN_WIDTH/5,
+                    SCREEN_HEIGHT - (SCREEN_HEIGHT/20)
+                ),
+                mapOf(RelativeLayout.BELOW to R.id.fixed_relative_layout),
+                it
+            )
+        }
 
         // content
         contentRelativeLayout = RelativeLayout(applicationContext)
-        initRelativeLayout(
-            contentRelativeLayout!!,
-            R.id.content_relative_layout,
-            RelativeLayout.LayoutParams(
-                SCREEN_WIDTH - (SCREEN_WIDTH/5),
-                SCREEN_HEIGHT - (SCREEN_HEIGHT/20)
-            ),
-            mapOf(RelativeLayout.RIGHT_OF to R.id.column_relative_layout, RelativeLayout.BELOW to R.id.header_relative_layout)
-        )
+        mainRelativeLayout?.let {
+            initLayout(
+                contentRelativeLayout!!,
+                R.id.content_relative_layout,
+                RelativeLayout.LayoutParams(
+                    SCREEN_WIDTH - (SCREEN_WIDTH/5),
+                    SCREEN_HEIGHT - (SCREEN_HEIGHT/20)
+                ),
+                mapOf(RelativeLayout.RIGHT_OF to R.id.column_relative_layout, RelativeLayout.BELOW to R.id.header_relative_layout),
+                it
+            )
+        }
     }
 
-    private fun initRelativeLayout(
+    private fun initLayout(
         layout: RelativeLayout,
         assignedId: Int,
         layoutParams: RelativeLayout.LayoutParams,
-        layoutRules: Map<Int, Int>
+        layoutRules: Map<Int, Int>,
+        parentView: ViewGroup
     ) {
         layout.apply {
             id = assignedId
@@ -143,7 +156,7 @@ class MainActivity : AppCompatActivity(), HorizontalScroll.ScrollViewListener, V
         for (rule in layoutRules) {
             layoutParams.addRule(rule.key, rule.value)
         }
-        mainRelativeLayout!!.addView(layout, layoutParams)
+        parentView!!.addView(layout, layoutParams)
     }
 
     private fun initScrollers() {

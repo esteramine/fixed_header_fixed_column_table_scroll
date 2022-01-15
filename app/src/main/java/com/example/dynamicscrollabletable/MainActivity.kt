@@ -219,10 +219,6 @@ class MainActivity : AppCompatActivity(), HorizontalScroll.ScrollViewListener, V
 
     }
 
-    private fun initScroller() {
-
-    }
-
     private fun initTableLayouts() {
         fixedTableLayout = TableLayout(applicationContext)
         fixedTableLayout!!.setBackgroundColor(resources.getColor(R.color.teal_200))
@@ -235,32 +231,35 @@ class MainActivity : AppCompatActivity(), HorizontalScroll.ScrollViewListener, V
         }
 
         headerTableLayout = TableLayout(applicationContext)
-        headerTableLayout!!.setPadding(0,0,0,0)
-        columnTableLayout = TableLayout(applicationContext)
-        columnTableLayout!!.setPadding(0,0,0,0)
-        contentTableLayout = TableLayout(applicationContext)
-        contentTableLayout!!.setPadding(0,0,0,0)
-
-
-
-
-        val headerLayoutParams =
-            TableLayout.LayoutParams(SCREEN_WIDTH - (SCREEN_WIDTH / 5), SCREEN_HEIGHT / 20)
-        headerTableLayout!!.layoutParams = headerLayoutParams
         headerTableLayout!!.setBackgroundColor(resources.getColor(R.color.purple_200))
-        headerHorizontalScrollView!!.addView(headerTableLayout)
+        headerHorizontalScrollView?.let {
+            initGeneralLayout(
+                headerTableLayout!!,
+                TableLayout.LayoutParams(SCREEN_WIDTH - (SCREEN_WIDTH / 5), SCREEN_HEIGHT / 20),
+                it
+            )
+        }
 
-        val columnLayoutParams =
-            TableLayout.LayoutParams(SCREEN_WIDTH / 5, SCREEN_HEIGHT - (SCREEN_HEIGHT / 20))
-        columnTableLayout!!.layoutParams = columnLayoutParams
+        columnTableLayout = TableLayout(applicationContext)
         columnTableLayout!!.setBackgroundColor(resources.getColor(R.color.purple_500))
-        columnVerticalScrollView!!.addView(columnTableLayout)
+        columnVerticalScrollView?.let {
+            initGeneralLayout(
+                columnTableLayout!!,
+                TableLayout.LayoutParams(SCREEN_WIDTH / 5, SCREEN_HEIGHT - (SCREEN_HEIGHT / 20)),
+                it
+            )
+        }
 
-        val contentLayoutParams =
-            TableLayout.LayoutParams(SCREEN_WIDTH - (SCREEN_WIDTH / 5), SCREEN_HEIGHT - (SCREEN_HEIGHT / 20))
-        contentTableLayout!!.layoutParams = contentLayoutParams
+
+        contentTableLayout = TableLayout(applicationContext)
         contentTableLayout!!.setBackgroundColor(resources.getColor(R.color.purple_700))
-        contentHorizontalScrollView!!.addView(contentTableLayout)
+        contentHorizontalScrollView?.let {
+            initGeneralLayout(
+                contentTableLayout!!,
+                TableLayout.LayoutParams(SCREEN_WIDTH - (SCREEN_WIDTH / 5), SCREEN_HEIGHT - (SCREEN_HEIGHT / 20)),
+                it
+            )
+        }
     }
 
 

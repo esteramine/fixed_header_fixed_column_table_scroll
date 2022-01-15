@@ -45,17 +45,12 @@ class MainActivity : AppCompatActivity(), HorizontalScroll.ScrollViewListener, V
 
         mainRelativeLayout = findViewById(R.id.main_relative_layout)
         getScreenDimensions()
-        initRelativeLayouts()
-        initScrollers()
-        initTableLayouts()
-        headerHorizontalScrollView?.setScrollViewListener(this);
-        headerHorizontalScrollView?.setHorizontalScrollBarEnabled(false)
-        contentHorizontalScrollView?.setScrollViewListener(this)
-        contentHorizontalScrollView?.setHorizontalScrollBarEnabled(false)
-        columnVerticalScrollView?.setScrollViewListener(this)
-        columnVerticalScrollView?.setVerticalScrollBarEnabled(false)
-        contentVerticalScrollView?.setScrollViewListener(this)
-        contentVerticalScrollView?.setHorizontalScrollBarEnabled(false)
+        initFixedSection()
+        initHeaderSection()
+        initColumnSection()
+        initContentSection()
+        initScrollViewListeners()
+
         addRowToTableA();
         initializeRowForTableB();
 
@@ -78,68 +73,6 @@ class MainActivity : AppCompatActivity(), HorizontalScroll.ScrollViewListener, V
 
         SCREEN_WIDTH = displayMetrics.widthPixels
         SCREEN_HEIGHT = displayMetrics.heightPixels
-    }
-
-    private fun initRelativeLayouts() {
-        // fixed
-        fixedRelativeLayout = RelativeLayout(applicationContext)
-        fixedRelativeLayout!!.id = R.id.fixed_relative_layout
-        mainRelativeLayout?.let {
-            initRelativeLayout(
-                fixedRelativeLayout!!,
-                RelativeLayout.LayoutParams(
-                    SCREEN_WIDTH / 5,
-                    SCREEN_HEIGHT / 20
-                ),
-                emptyMap(),
-                it
-            )
-        }
-
-        // header
-        headerRelativeLayout = RelativeLayout(applicationContext)
-        headerRelativeLayout!!.id = R.id.header_relative_layout
-        mainRelativeLayout?.let {
-            initRelativeLayout(
-                headerRelativeLayout!!,
-                RelativeLayout.LayoutParams(
-                    SCREEN_WIDTH - (SCREEN_WIDTH/5),
-                    SCREEN_HEIGHT/20
-                ),
-                mapOf(RelativeLayout.RIGHT_OF to R.id.fixed_relative_layout),
-                it
-            )
-        }
-
-        // column
-        columnRelativeLayout = RelativeLayout(applicationContext)
-        columnRelativeLayout!!.id = R.id.column_relative_layout
-        mainRelativeLayout?.let {
-            initRelativeLayout(
-                columnRelativeLayout!!,
-                RelativeLayout.LayoutParams(
-                    SCREEN_WIDTH/5,
-                    SCREEN_HEIGHT - (SCREEN_HEIGHT/20)
-                ),
-                mapOf(RelativeLayout.BELOW to R.id.fixed_relative_layout),
-                it
-            )
-        }
-
-        // content
-        contentRelativeLayout = RelativeLayout(applicationContext)
-        contentRelativeLayout!!.id = R.id.content_relative_layout
-        mainRelativeLayout?.let {
-            initRelativeLayout(
-                contentRelativeLayout!!,
-                RelativeLayout.LayoutParams(
-                    SCREEN_WIDTH - (SCREEN_WIDTH/5),
-                    SCREEN_HEIGHT - (SCREEN_HEIGHT/20)
-                ),
-                mapOf(RelativeLayout.RIGHT_OF to R.id.column_relative_layout, RelativeLayout.BELOW to R.id.header_relative_layout),
-                it
-            )
-        }
     }
 
     private fun initRelativeLayout(
@@ -168,7 +101,47 @@ class MainActivity : AppCompatActivity(), HorizontalScroll.ScrollViewListener, V
         parentView!!.addView(layout, layoutParams)
     }
 
-    private fun initScrollers() {
+    private fun initFixedSection() {
+        fixedRelativeLayout = RelativeLayout(applicationContext)
+        fixedRelativeLayout!!.id = R.id.fixed_relative_layout
+        mainRelativeLayout?.let {
+            initRelativeLayout(
+                fixedRelativeLayout!!,
+                RelativeLayout.LayoutParams(
+                    SCREEN_WIDTH / 5,
+                    SCREEN_HEIGHT / 20
+                ),
+                emptyMap(),
+                it
+            )
+        }
+
+        fixedTableLayout = TableLayout(applicationContext)
+        fixedTableLayout!!.setBackgroundColor(resources.getColor(R.color.teal_200))
+        fixedRelativeLayout?.let {
+            initGeneralLayout(
+                fixedTableLayout!!,
+                TableLayout.LayoutParams(SCREEN_WIDTH / 5, SCREEN_HEIGHT / 20),
+                it
+            )
+        }
+
+    }
+    private fun initHeaderSection() {
+        headerRelativeLayout = RelativeLayout(applicationContext)
+        headerRelativeLayout!!.id = R.id.header_relative_layout
+        mainRelativeLayout?.let {
+            initRelativeLayout(
+                headerRelativeLayout!!,
+                RelativeLayout.LayoutParams(
+                    SCREEN_WIDTH - (SCREEN_WIDTH/5),
+                    SCREEN_HEIGHT/20
+                ),
+                mapOf(RelativeLayout.RIGHT_OF to R.id.fixed_relative_layout),
+                it
+            )
+        }
+
         headerHorizontalScrollView = HorizontalScroll(applicationContext)
         headerRelativeLayout?.let {
             initGeneralLayout(
@@ -181,6 +154,32 @@ class MainActivity : AppCompatActivity(), HorizontalScroll.ScrollViewListener, V
             )
         }
 
+        headerTableLayout = TableLayout(applicationContext)
+        headerTableLayout!!.setBackgroundColor(resources.getColor(R.color.purple_200))
+        headerHorizontalScrollView?.let {
+            initGeneralLayout(
+                headerTableLayout!!,
+                TableLayout.LayoutParams(SCREEN_WIDTH - (SCREEN_WIDTH / 5), SCREEN_HEIGHT / 20),
+                it
+            )
+        }
+
+    }
+    private fun initColumnSection() {
+        columnRelativeLayout = RelativeLayout(applicationContext)
+        columnRelativeLayout!!.id = R.id.column_relative_layout
+        mainRelativeLayout?.let {
+            initRelativeLayout(
+                columnRelativeLayout!!,
+                RelativeLayout.LayoutParams(
+                    SCREEN_WIDTH/5,
+                    SCREEN_HEIGHT - (SCREEN_HEIGHT/20)
+                ),
+                mapOf(RelativeLayout.BELOW to R.id.fixed_relative_layout),
+                it
+            )
+        }
+
         columnVerticalScrollView = VerticalScroll(applicationContext)
         columnRelativeLayout?.let {
             initGeneralLayout(
@@ -189,6 +188,31 @@ class MainActivity : AppCompatActivity(), HorizontalScroll.ScrollViewListener, V
                     SCREEN_WIDTH/5,
                     SCREEN_HEIGHT - (SCREEN_HEIGHT/20)
                 ),
+                it
+            )
+        }
+
+        columnTableLayout = TableLayout(applicationContext)
+        columnTableLayout!!.setBackgroundColor(resources.getColor(R.color.purple_500))
+        columnVerticalScrollView?.let {
+            initGeneralLayout(
+                columnTableLayout!!,
+                TableLayout.LayoutParams(SCREEN_WIDTH / 5, SCREEN_HEIGHT - (SCREEN_HEIGHT / 20)),
+                it
+            )
+        }
+    }
+    private fun initContentSection() {
+        contentRelativeLayout = RelativeLayout(applicationContext)
+        contentRelativeLayout!!.id = R.id.content_relative_layout
+        mainRelativeLayout?.let {
+            initRelativeLayout(
+                contentRelativeLayout!!,
+                RelativeLayout.LayoutParams(
+                    SCREEN_WIDTH - (SCREEN_WIDTH/5),
+                    SCREEN_HEIGHT - (SCREEN_HEIGHT/20)
+                ),
+                mapOf(RelativeLayout.RIGHT_OF to R.id.column_relative_layout, RelativeLayout.BELOW to R.id.header_relative_layout),
                 it
             )
         }
@@ -217,40 +241,6 @@ class MainActivity : AppCompatActivity(), HorizontalScroll.ScrollViewListener, V
             )
         }
 
-    }
-
-    private fun initTableLayouts() {
-        fixedTableLayout = TableLayout(applicationContext)
-        fixedTableLayout!!.setBackgroundColor(resources.getColor(R.color.teal_200))
-        fixedRelativeLayout?.let {
-            initGeneralLayout(
-                fixedTableLayout!!,
-                TableLayout.LayoutParams(SCREEN_WIDTH / 5, SCREEN_HEIGHT / 20),
-                it
-            )
-        }
-
-        headerTableLayout = TableLayout(applicationContext)
-        headerTableLayout!!.setBackgroundColor(resources.getColor(R.color.purple_200))
-        headerHorizontalScrollView?.let {
-            initGeneralLayout(
-                headerTableLayout!!,
-                TableLayout.LayoutParams(SCREEN_WIDTH - (SCREEN_WIDTH / 5), SCREEN_HEIGHT / 20),
-                it
-            )
-        }
-
-        columnTableLayout = TableLayout(applicationContext)
-        columnTableLayout!!.setBackgroundColor(resources.getColor(R.color.purple_500))
-        columnVerticalScrollView?.let {
-            initGeneralLayout(
-                columnTableLayout!!,
-                TableLayout.LayoutParams(SCREEN_WIDTH / 5, SCREEN_HEIGHT - (SCREEN_HEIGHT / 20)),
-                it
-            )
-        }
-
-
         contentTableLayout = TableLayout(applicationContext)
         contentTableLayout!!.setBackgroundColor(resources.getColor(R.color.purple_700))
         contentHorizontalScrollView?.let {
@@ -260,8 +250,18 @@ class MainActivity : AppCompatActivity(), HorizontalScroll.ScrollViewListener, V
                 it
             )
         }
-    }
 
+    }
+    private fun initScrollViewListeners() {
+        headerHorizontalScrollView?.setScrollViewListener(this);
+        headerHorizontalScrollView?.setHorizontalScrollBarEnabled(false)
+        contentHorizontalScrollView?.setScrollViewListener(this)
+        contentHorizontalScrollView?.setHorizontalScrollBarEnabled(false)
+        columnVerticalScrollView?.setScrollViewListener(this)
+        columnVerticalScrollView?.setVerticalScrollBarEnabled(false)
+        contentVerticalScrollView?.setScrollViewListener(this)
+        contentVerticalScrollView?.setHorizontalScrollBarEnabled(false)
+    }
 
     private fun addRowToTableA() {
         tableRow = TableRow(applicationContext)

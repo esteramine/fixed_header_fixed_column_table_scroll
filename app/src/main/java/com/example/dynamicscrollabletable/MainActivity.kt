@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity(), HorizontalScroll.ScrollViewListener, V
         initContentSection()
         initScrollViewListeners()
 
-        addRowToTableA();
+        addRowToFixedSection();
         initializeRowForTableB();
 
         for (i in 0..8) {
@@ -263,21 +263,26 @@ class MainActivity : AppCompatActivity(), HorizontalScroll.ScrollViewListener, V
         contentVerticalScrollView?.setHorizontalScrollBarEnabled(false)
     }
 
-    private fun addRowToTableA() {
+    private fun addRowToFixedSection() {
+        val labelNames = TextView(applicationContext)
+        labelNames.text = "Row \\ Col."
+        labelNames.textSize = resources.getDimension(R.dimen.cell_text_size)
+
         tableRow = TableRow(applicationContext)
-        val layoutParamsTableRow = TableRow.LayoutParams(SCREEN_WIDTH / 5, SCREEN_HEIGHT / 20)
-        tableRow!!.layoutParams = layoutParamsTableRow
-        val label_date = TextView(applicationContext)
-        label_date.text = "Item/ID"
-        tableRow!!.gravity = Gravity.CENTER_HORIZONTAL or Gravity.CENTER_VERTICAL
-        label_date.textSize = resources.getDimension(R.dimen.cell_text_size)
-        tableRow!!.addView(label_date)
-        fixedTableLayout?.addView(tableRow)
+        tableRow!!.gravity = Gravity.CENTER_HORIZONTAL
+        tableRow!!.addView(labelNames)
+
+        fixedTableLayout?.let {
+            initGeneralLayout(
+                tableRow!!,
+                TableRow.LayoutParams(SCREEN_WIDTH / 5, SCREEN_HEIGHT / 20),
+                it
+            )
+        }
     }
 
     private fun initializeRowForTableB() {
         headerTableRow = TableRow(applicationContext)
-        tableRow!!.setPadding(0, 0, 0, 0)
         headerTableLayout?.addView(headerTableRow)
     }
 

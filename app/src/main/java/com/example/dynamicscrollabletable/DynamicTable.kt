@@ -16,8 +16,6 @@ import androidx.constraintlayout.widget.ConstraintSet
 class DynamicTable(context: Context, attrs: AttributeSet) : ConstraintLayout(context, attrs), HorizontalScroll.ScrollViewListener, VerticalScroll.ScrollViewListener {
     var rowHeight: Int = 100
     var columnWidth: Int =  200
-    var numRows: Int = 20
-    var numColumns: Int = 10
 
     var fixedRelativeLayout: RelativeLayout? = null
     var headerRelativeLayout: RelativeLayout? = null
@@ -63,8 +61,6 @@ class DynamicTable(context: Context, attrs: AttributeSet) : ConstraintLayout(con
             try {
                 rowHeight = getInteger(R.styleable.DynamicTable_rowHeight, 100)
                 columnWidth = getInteger(R.styleable.DynamicTable_columnWidth, 200)
-                numRows = getInteger(R.styleable.DynamicTable_numRows, 20)
-                numColumns = getInteger(R.styleable.DynamicTable_numColumns, 10)
 
             } finally {
                 recycle()

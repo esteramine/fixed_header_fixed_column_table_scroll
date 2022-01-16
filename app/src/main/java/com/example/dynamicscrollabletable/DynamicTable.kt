@@ -14,45 +14,28 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 
 class DynamicTable(context: Context, attrs: AttributeSet) : ConstraintLayout(context, attrs), HorizontalScroll.ScrollViewListener, VerticalScroll.ScrollViewListener {
-    var rowHeight: Int = 100
-    var columnWidth: Int =  200
+    private var headerHeight: Int = 100
+    private var rowHeight: Int = 100
+    private var columnWidth: Int =  200
 
-    var fixedRelativeLayout: RelativeLayout? = null
-    var headerRelativeLayout: RelativeLayout? = null
-    var columnRelativeLayout: RelativeLayout? = null
-    var contentRelativeLayout: RelativeLayout? = null
+    private var fixedRelativeLayout: RelativeLayout? = null
+    private var headerRelativeLayout: RelativeLayout? = null
+    private var columnRelativeLayout: RelativeLayout? = null
 
-    var fixedTableLayout: TableLayout? = null
-    var headerTableLayout: TableLayout? = null
-    var columnTableLayout: TableLayout? = null
-    var contentTableLayout: TableLayout? = null
+    private var headerTableLayout: TableLayout? = null
+    private var columnTableLayout: TableLayout? = null
+    private var contentTableLayout: TableLayout? = null
 
-    var headerHorizontalScrollView: HorizontalScroll? = null
-    var contentHorizontalScrollView: HorizontalScroll? = null
+    private var headerHorizontalScrollView: HorizontalScroll? = null
+    private var contentHorizontalScrollView: HorizontalScroll? = null
 
-    var columnVerticalScrollView: VerticalScroll? = null
-    var contentVerticalScrollView: VerticalScroll? = null
+    private var columnVerticalScrollView: VerticalScroll? = null
+    private var contentVerticalScrollView: VerticalScroll? = null
 
     init {
         inflate(context, R.layout.dynamic_table_layout, this)
-
-        fixedRelativeLayout = findViewById(R.id.fixed_section)
-        headerRelativeLayout = findViewById(R.id.header_section)
-        columnRelativeLayout = findViewById(R.id.column_section)
-
-        headerTableLayout = findViewById(R.id.header_table_layout)
-        columnTableLayout = findViewById(R.id.column_table_layout)
-        contentTableLayout = findViewById(R.id.content_table_layout)
-
-        headerHorizontalScrollView = findViewById(R.id.header_scrollview)
-        columnVerticalScrollView = findViewById(R.id.column_scrollview)
-        contentVerticalScrollView = findViewById(R.id.content_vertical_scrollview)
-        contentHorizontalScrollView = findViewById(R.id.content_horizontal_scrollview)
-
-        headerHorizontalScrollView?.let { it.setScrollViewListener(this) }
-        contentHorizontalScrollView?.let { it.setScrollViewListener(this) }
-        columnVerticalScrollView?.let { it.setScrollViewListener(this) }
-        contentVerticalScrollView?.let { it.setScrollViewListener(this) }
+        initViews()
+        initScrollViewListeners()
 
         context.theme.obtainStyledAttributes(
             attrs,
@@ -73,11 +56,11 @@ class DynamicTable(context: Context, attrs: AttributeSet) : ConstraintLayout(con
         }
     }
 
-    fun initDimensions(rowHeight: Int, columnWidth: Int) {
+    fun initDimensions(headerHeight: Int, columnWidth: Int) {
 
-        fixedRelativeLayout?.let { it.layoutParams.height = rowHeight }
+        fixedRelativeLayout?.let { it.layoutParams.height = headerHeight }
         fixedRelativeLayout?.let { it.layoutParams.width = columnWidth }
-        headerRelativeLayout?.let { it.layoutParams.height = rowHeight }
+        headerRelativeLayout?.let { it.layoutParams.height = headerHeight }
         columnRelativeLayout?.let { it.layoutParams.width = columnWidth }
 
     }
@@ -95,15 +78,6 @@ class DynamicTable(context: Context, attrs: AttributeSet) : ConstraintLayout(con
     }
 
     fun addRow(columnView: View, cellViewList: List<View>) {
-//        val linearLayout = LinearLayout(context)
-//        linearLayout.layoutParams = LinearLayout.LayoutParams(
-//            LayoutParams.MATCH_PARENT,
-//            rowHeight
-//        )
-//        linearLayout.orientation = LinearLayout.VERTICAL
-//        linearLayout.gravity = Gravity.CENTER
-//        linearLayout.addView(columnView)
-
         val tableRow = TableRow(context)
         tableRow.addView(columnView)
         columnTableLayout?.addView(tableRow)
@@ -113,6 +87,40 @@ class DynamicTable(context: Context, attrs: AttributeSet) : ConstraintLayout(con
             contentTableRow.addView(view)
         }
         contentTableLayout?.addView(contentTableRow)
+    }
+
+    private fun initViews() {
+        fixedRelativeLayout = findViewById(R.id.fixed_section)
+        headerRelativeLayout = findViewById(R.id.header_section)
+        columnRelativeLayout = findViewById(R.id.column_section)
+
+        headerTableLayout = findViewById(R.id.header_table_layout)
+        columnTableLayout = findViewById(R.id.column_table_layout)
+        contentTableLayout = findViewById(R.id.content_table_layout)
+
+        headerHorizontalScrollView = findViewById(R.id.header_scrollview)
+        columnVerticalScrollView = findViewById(R.id.column_scrollview)
+        contentVerticalScrollView = findViewById(R.id.content_vertical_scrollview)
+        contentHorizontalScrollView = findViewById(R.id.content_horizontal_scrollview)
+    }
+
+    private fun initScrollViewListeners() {
+        headerHorizontalScrollView?.let {
+            it.setScrollViewListener(this)
+            it.isHorizontalScrollBarEnabled = false
+        }
+        contentHorizontalScrollView?.let {
+            it.setScrollViewListener(this)
+            it.isHorizontalScrollBarEnabled = false
+        }
+        columnVerticalScrollView?.let {
+            it.setScrollViewListener(this)
+            it.isVerticalScrollBarEnabled = false
+        }
+        contentVerticalScrollView?.let {
+            it.setScrollViewListener(this)
+            it.isVerticalScrollBarEnabled = false
+        }
     }
 
     override fun onScrollChanged(

@@ -11,11 +11,11 @@
         app:layout_constraintLeft_toLeftOf="parent"
         android:background="@color/fixed">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="hihihi"
-            android:textSize="30dp"/>
+<!--        <TextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="hihihi"-->
+<!--            android:textSize="30dp"/>-->
 
     </RelativeLayout>
 

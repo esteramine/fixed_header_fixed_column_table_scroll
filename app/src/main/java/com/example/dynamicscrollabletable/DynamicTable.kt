@@ -79,6 +79,18 @@ class DynamicTable(context: Context, attrs: AttributeSet) : ConstraintLayout(con
         }
     }
 
+    fun addRowColumnName(view:View) {
+        fixedRelativeLayout?.addView(view)
+    }
+
+    fun addHeader(cellViewList: List<View>) {
+        val tableRow = TableRow(context)
+        for (view in cellViewList) {
+            tableRow.addView(view)
+        }
+        headerTableLayout?.addView(tableRow)
+    }
+
     fun addRow(columnView: View, cellViewList: List<View>) {
 //        val linearLayout = LinearLayout(context)
 //        linearLayout.layoutParams = LinearLayout.LayoutParams(

@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="DynamicTable">
-        <attr name="rowHeight" format="integer" />
-        <attr name="columnWidth" format="integer" />
+<!--        <attr name="rowHeight" format="integer" />-->
+<!--        <attr name="columnWidth" format="integer" />-->
 
-        <attr name="numRows" format="integer" />
-        <attr name="numColumns" format="integer" />
+<!--        <attr name="numRows" format="integer" />-->
+<!--        <attr name="numColumns" format="integer" />-->
+        <attr name="shadow" format="integer" />
     </declare-styleable>
 </resources>

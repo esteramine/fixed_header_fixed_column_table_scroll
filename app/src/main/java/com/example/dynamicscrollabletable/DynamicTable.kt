@@ -10,6 +10,7 @@ import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TableLayout
 import android.widget.TableRow
+import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 
@@ -42,8 +43,13 @@ class DynamicTable(context: Context, attrs: AttributeSet) : ConstraintLayout(con
             R.styleable.DynamicTable,
             0, 0)?.apply {
             try {
-                rowHeight = getInteger(R.styleable.DynamicTable_rowHeight, 100)
-                columnWidth = getInteger(R.styleable.DynamicTable_columnWidth, 200)
+//                rowHeight = getInteger(R.styleable.DynamicTable_rowHeight, 100)
+//                columnWidth = getInteger(R.styleable.DynamicTable_columnWidth, 200)
+                val shadow = getInteger(R.styleable.DynamicTable_shadow, 0)
+                val headerCardView: CardView = findViewById(R.id.header_card_view)
+                headerCardView.cardElevation = shadow.toFloat()
+                val columnCardView: CardView = findViewById(R.id.column_card_view)
+                columnCardView.cardElevation = shadow.toFloat()
 
             } finally {
                 recycle()

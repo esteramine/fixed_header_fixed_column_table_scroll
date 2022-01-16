@@ -3,7 +3,6 @@
     <declare-styleable name="DynamicTable">
         <attr name="rowHeight" format="integer" />
         <attr name="columnWidth" format="integer" />
-        <attr name="cellWidth" format="integer" />
 
         <attr name="numRows" format="integer" />
         <attr name="numColumns" format="integer" />

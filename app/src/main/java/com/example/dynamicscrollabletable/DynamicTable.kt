@@ -16,7 +16,6 @@ import androidx.constraintlayout.widget.ConstraintSet
 class DynamicTable(context: Context, attrs: AttributeSet) : ConstraintLayout(context, attrs), HorizontalScroll.ScrollViewListener, VerticalScroll.ScrollViewListener {
     var rowHeight: Int = 100
     var columnWidth: Int =  200
-    var cellWidth: Int = 300
     var numRows: Int = 20
     var numColumns: Int = 10
 
@@ -64,7 +63,6 @@ class DynamicTable(context: Context, attrs: AttributeSet) : ConstraintLayout(con
             try {
                 rowHeight = getInteger(R.styleable.DynamicTable_rowHeight, 100)
                 columnWidth = getInteger(R.styleable.DynamicTable_columnWidth, 200)
-                cellWidth = getInteger(R.styleable.DynamicTable_cellWidth, 300)
                 numRows = getInteger(R.styleable.DynamicTable_numRows, 20)
                 numColumns = getInteger(R.styleable.DynamicTable_numColumns, 10)
 
@@ -77,6 +75,15 @@ class DynamicTable(context: Context, attrs: AttributeSet) : ConstraintLayout(con
             headerRelativeLayout?.let { it.layoutParams.height = rowHeight }
             columnRelativeLayout?.let { it.layoutParams.width = columnWidth }
         }
+    }
+
+    fun initDimensions(rowHeight: Int, columnWidth: Int) {
+
+        fixedRelativeLayout?.let { it.layoutParams.height = rowHeight }
+        fixedRelativeLayout?.let { it.layoutParams.width = columnWidth }
+        headerRelativeLayout?.let { it.layoutParams.height = rowHeight }
+        columnRelativeLayout?.let { it.layoutParams.width = columnWidth }
+
     }
 
     fun addRowColumnName(view:View) {

@@ -14,7 +14,11 @@ import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 
-class DynamicTable(context: Context, attrs: AttributeSet) : ConstraintLayout(context, attrs), HorizontalScroll.ScrollViewListener, VerticalScroll.ScrollViewListener {
+class DynamicTableWithPredefinedView(context: Context, attrs: AttributeSet) : ConstraintLayout(context, attrs), HorizontalScroll.ScrollViewListener, VerticalScroll.ScrollViewListener {
+    private var headerHeight: Int = 100
+    private var rowHeight: Int = 100
+    private var columnWidth: Int =  200
+
     private var fixedRelativeLayout: RelativeLayout? = null
     private var headerRelativeLayout: RelativeLayout? = null
     private var columnRelativeLayout: RelativeLayout? = null
@@ -29,10 +33,6 @@ class DynamicTable(context: Context, attrs: AttributeSet) : ConstraintLayout(con
     private var columnVerticalScrollView: VerticalScroll? = null
     private var contentVerticalScrollView: VerticalScroll? = null
 
-//    private var headerCellView: View? = null
-//    private var columnCellView: View? = null
-//    private var contentCellView: View? = null
-
     init {
         inflate(context, R.layout.dynamic_table_layout, this)
         initViews()
@@ -43,6 +43,8 @@ class DynamicTable(context: Context, attrs: AttributeSet) : ConstraintLayout(con
             R.styleable.DynamicTable,
             0, 0)?.apply {
             try {
+//                rowHeight = getInteger(R.styleable.DynamicTable_rowHeight, 100)
+//                columnWidth = getInteger(R.styleable.DynamicTable_columnWidth, 200)
                 val shadow = getInteger(R.styleable.DynamicTable_shadow, 0)
                 val headerCardView: CardView = findViewById(R.id.header_card_view)
                 headerCardView.cardElevation = shadow.toFloat()
@@ -52,25 +54,22 @@ class DynamicTable(context: Context, attrs: AttributeSet) : ConstraintLayout(con
             } finally {
                 recycle()
             }
-            
-            // init default dimensions
-            initDimensions(100, 200)
+
+            fixedRelativeLayout?.let { it.layoutParams.height = rowHeight }
+            fixedRelativeLayout?.let { it.layoutParams.width = columnWidth }
+            headerRelativeLayout?.let { it.layoutParams.height = rowHeight }
+            columnRelativeLayout?.let { it.layoutParams.width = columnWidth }
         }
     }
 
     fun initDimensions(headerHeight: Int, columnWidth: Int) {
+
         fixedRelativeLayout?.let { it.layoutParams.height = headerHeight }
         fixedRelativeLayout?.let { it.layoutParams.width = columnWidth }
         headerRelativeLayout?.let { it.layoutParams.height = headerHeight }
         columnRelativeLayout?.let { it.layoutParams.width = columnWidth }
+
     }
-
-//    fun initCellViews(headerCellView: View, columnCellView: View, contentCellView: View) {
-//        this.headerCellView = headerCellView
-//        this.columnCellView = columnCellView
-//        this.contentCellView = contentCellView
-//    }
-
 
     fun addRowColumnName(view:View) {
         fixedRelativeLayout?.addView(view)
@@ -84,24 +83,7 @@ class DynamicTable(context: Context, attrs: AttributeSet) : ConstraintLayout(con
         headerTableLayout?.addView(tableRow)
     }
 
-//    fun addRow(text: List<List<String>>) { // only if view is init or will be text view in default
-//        if (columnCellView == null) { // default text view
-//
-//        }
-//        else {
-//            columnCellView.text =
-//
-//        }
-//
-//        if (contentCellView == null) { // default cell view
-//
-//        }
-//        else {
-//
-//        }
-//    }
-
-    fun addRow(columnView: View, cellViewList: List<View>) { // directly pass cell view
+    fun addRow(columnView: View, cellViewList: List<View>) {
         val tableRow = TableRow(context)
         tableRow.addView(columnView)
         columnTableLayout?.addView(tableRow)

@@ -3,7 +3,7 @@
     android:layout_width="320px"
     android:layout_height="120px"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/gray">
+    android:background="@drawable/border">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraint"
         android:layout_width="320px"

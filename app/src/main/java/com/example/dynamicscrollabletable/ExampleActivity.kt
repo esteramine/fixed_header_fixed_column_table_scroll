@@ -25,6 +25,11 @@ class ExampleActivity : AppCompatActivity() {
         listOf("Ting", R.drawable.braves_ting) to listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14),
         listOf("Winston", R.drawable.braves_winston) to listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14),
         listOf("Zaytsev", R.drawable.braves_zaytsev) to listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14),
+        listOf("Dummy1", R.drawable.braves_zaytsev) to listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14),
+        listOf("Dummy2", R.drawable.braves_zaytsev) to listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14),
+        listOf("Dummy3", R.drawable.braves_zaytsev) to listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14),
+        listOf("Dummy4", R.drawable.braves_zaytsev) to listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14),
+        listOf("Dummy5", R.drawable.braves_zaytsev) to listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14),
     )
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

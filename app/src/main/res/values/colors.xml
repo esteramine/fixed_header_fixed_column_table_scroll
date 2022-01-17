@@ -11,5 +11,6 @@
     <color name="header">#92A9BDFF</color>
     <color name="column">#7C99ACFF</color>
     <color name="content">#FFEFEFFF</color>
-    <color name="gray">#B3C9C9C9</color>
+    <color name="gray_200">#E5E5E5</color>
+    <color name="gray_500">#9F9F9F</color>
 </resources>

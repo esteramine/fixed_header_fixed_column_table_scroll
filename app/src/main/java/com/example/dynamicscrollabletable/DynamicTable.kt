@@ -2,14 +2,13 @@ package com.example.dynamicscrollabletable
 
 import android.content.Context
 import android.util.AttributeSet
+import android.util.Log
+import android.util.Log.DEBUG
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
-import android.widget.RelativeLayout
-import android.widget.TableLayout
-import android.widget.TableRow
+import android.widget.*
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
@@ -33,6 +32,13 @@ class DynamicTable(context: Context, attrs: AttributeSet) : ConstraintLayout(con
 //    private var columnCellView: View? = null
 //    private var contentCellView: View? = null
 
+    private var headerCellViewName = ""
+    private var headerCellViewTextName = ""
+    private var contentCellViewName = ""
+    private var contentCellViewTextName = ""
+    private var columnCellViewName = ""
+    private var columnCellViewTextName = ""
+
     init {
         inflate(context, R.layout.dynamic_table_layout, this)
         initViews()
@@ -52,7 +58,7 @@ class DynamicTable(context: Context, attrs: AttributeSet) : ConstraintLayout(con
             } finally {
                 recycle()
             }
-            
+
             // init default dimensions
             initDimensions(100, 200)
         }
@@ -65,11 +71,116 @@ class DynamicTable(context: Context, attrs: AttributeSet) : ConstraintLayout(con
         columnRelativeLayout?.let { it.layoutParams.width = columnWidth }
     }
 
-//    fun initCellViews(headerCellView: View, columnCellView: View, contentCellView: View) {
-//        this.headerCellView = headerCellView
-//        this.columnCellView = columnCellView
-//        this.contentCellView = contentCellView
-//    }
+    fun initCellViews(headerCellViewName: String, headerCellViewTextName: String, columnCellViewName: String, columnCellViewTextName: String, contentCellViewName: String, contentCellViewTextName: String) {
+        this.headerCellViewName = headerCellViewName
+        this.headerCellViewTextName = headerCellViewTextName
+        this.columnCellViewName = columnCellViewName
+        this.columnCellViewTextName = columnCellViewTextName
+        this.contentCellViewName = contentCellViewName
+        this.contentCellViewTextName = contentCellViewTextName
+    }
+
+    fun renderHeader(texts: List<String>) {
+        val headerViewId = resources.getIdentifier(headerCellViewName, "layout", context.packageName)
+        val headerTextId = resources.getIdentifier(headerCellViewTextName, "id", context.packageName)
+        val tableRow = TableRow(context)
+        for (text in texts) {
+            //val view = inflate(context, headerViewId, null)
+            val view = LayoutInflater.from(context).inflate(headerViewId, tableRow, false)
+            val textView: TextView = view.findViewById(headerTextId)
+            textView.text = text
+            tableRow.addView(view)
+        }
+        headerTableLayout?.addView(tableRow)
+    }
+
+    fun renderRows(texts: List<String>) {
+        val columnViewId = resources.getIdentifier(columnCellViewName, "layout", context.packageName)
+        val columnTextId = resources.getIdentifier(columnCellViewTextName, "id", context.packageName)
+        val contentViewId = resources.getIdentifier(contentCellViewName, "layout", context.packageName)
+        val contentTextId = resources.getIdentifier(contentCellViewTextName, "id", context.packageName)
+
+        val columnTableRow = TableRow(context)
+        val columnView = LayoutInflater.from(context).inflate(columnViewId, columnTableRow, false)
+        val columnTextView: TextView = columnView.findViewById(columnTextId)
+        columnTextView.text = texts[0]
+        columnTableRow.addView(columnView)
+        columnTableLayout?.addView(columnTableRow)
+
+        val contentTableRow = TableRow(context)
+        for (i in 1 until texts.size) {
+            val contentCellView = LayoutInflater.from(context).inflate(contentViewId, contentTableRow, false)
+            val contentTextView: TextView = contentCellView.findViewById(contentTextId)
+            contentTextView.text = texts[i]
+            contentTableRow.addView(contentCellView)
+        }
+        contentTableLayout?.addView(contentTableRow)
+
+    }
+
+    fun renderTable(
+        headers: List<String>,
+        contents: List<List<String>>,
+        headerHeight: Int,
+        columnWidth: Int,
+        headerLayoutName: String,
+        headerTextViewName: String,
+        columnLayoutName: String,
+        columnTextViewName: String,
+        columnImageViewName: String,
+        contentLayoutName: String,
+        contentTextViewName: String
+    ) {
+        fixedRelativeLayout?.let { it.layoutParams.height = headerHeight }
+        fixedRelativeLayout?.let { it.layoutParams.width = columnWidth }
+        headerRelativeLayout?.let { it.layoutParams.height = headerHeight }
+        columnRelativeLayout?.let { it.layoutParams.width = columnWidth }
+
+        val headerViewId = resources.getIdentifier(headerLayoutName, "layout", context.packageName)
+        val headerTextId = resources.getIdentifier(headerTextViewName, "id", context.packageName)
+        val tableRow = TableRow(context)
+        for (text in headers) {
+            renderCell(text, headerViewId, headerTextId, tableRow)
+        }
+        headerTableLayout?.addView(tableRow)
+
+
+        val columnViewId = resources.getIdentifier(columnLayoutName, "layout", context.packageName)
+        val columnTextId = resources.getIdentifier(columnTextViewName, "id", context.packageName)
+        val columnImageId = resources.getIdentifier(columnImageViewName, "id", context.packageName)
+        val contentViewId = resources.getIdentifier(contentLayoutName, "layout", context.packageName)
+        val contentTextId = resources.getIdentifier(contentTextViewName, "id", context.packageName)
+
+        for (content in contents) {
+            val columnTableRow = TableRow(context)
+            renderCell(content[1], content[0], columnViewId, columnTextId, columnImageId, columnTableRow)
+            columnTableLayout?.addView(columnTableRow)
+
+            val contentTableRow = TableRow(context)
+            for (i in 2 until content.size) {
+                renderCell(content[i], contentViewId, contentTextId, contentTableRow)
+            }
+            contentTableLayout?.addView(contentTableRow)
+        }
+
+    }
+
+    fun renderCell(text: String, viewId: Int, textId: Int, tableRow: TableRow) {
+        val view = LayoutInflater.from(context).inflate(viewId, tableRow, false)
+        val textView: TextView = view.findViewById(textId)
+        textView.text = text
+        tableRow.addView(view)
+    }
+
+    fun renderCell(text: String, image: String, viewId: Int, textId: Int, imageId: Int, tableRow: TableRow) {
+        val view = LayoutInflater.from(context).inflate(viewId, tableRow, false)
+        val textView: TextView = view.findViewById(textId)
+        textView.text = text
+        val imageResource = resources.getIdentifier(image, "drawable", context.packageName)
+        val imageView: ImageView = view.findViewById(imageId)
+        imageView.setImageResource(imageResource)
+        tableRow.addView(view)
+    }
 
 
     fun addRowColumnName(view:View) {
